@@ -1,13 +1,6 @@
 library(shiny)
-library(MCMCpack)
-library(ggplot2)
-library(gridExtra)
-library(partitions)
 library(shinyjs)
-library(tidyverse)
-library(ggpubr)
-library(cowplot)
-library(stringr)
+library(ggplot2)
 
 textInputRow<-function (inputId, label, value = "")
 {
@@ -168,8 +161,7 @@ server <- function(input, output) {
   })
 
   output$Plots = renderPlot({
-    ptlist <- list(pt3())
-    grid.arrange(grobs=ptlist,nrow=length(ptlist))
+    pt3()
   })
 
   output$summaries <- renderPrint({

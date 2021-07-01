@@ -127,15 +127,15 @@ server <- function(input, output) {
       prior.mean = prior.mean + i*prior[i]
     }
 
-    post.mean=(Nmin:Nmax)[which.min(abs(posterior-rep(mean(posterior[posterior>0]),Nmax)))][1]
-    post.median=sum((cumsum(posterior)<0.5)==T)+1
+    post.mean=sum((1:Nmax)*posterior)
+        post.median=sum((cumsum(posterior)<0.5)==T)+1
 
     summaries = data.frame(Legend = factor(c("MLE","Unbiased","Prior mean" ,"Posterior mean", "Posterior median"),
                                            levels=c("MLE","Unbiased", "Prior mean","Posterior mean", "Posterior median")),
                                     vals = c(m(),2*m(),prior.mean,post.mean,post.median))
 
     samp.ub=sum((cumsum(posterior)<1-input$alpha)==T)+1
-    samp.ub.plot=sum((cumsum(posterior)<0.95)==T)+1
+    samp.ub.plot=max(sum((cumsum(posterior)<0.95)==T)+1,2*m()+1)
 
     gg=ggplot(df)+
       geom_line(aes(x=1:Nmax,y=posterior),size=1)+
@@ -147,8 +147,10 @@ server <- function(input, output) {
                   size = 1.5,
                   color = "blue")+ annotate(geom="text", x=samp.ub, y=0,label=paste0(" ",round((1-input$alpha)*100),"% CI"), color="blue",size=4.5,hjust=0)
     gg
+    
   })
 
+  
 
 
   #Output
@@ -195,7 +197,8 @@ server <- function(input, output) {
     for(i in Nmin:Nmax){
       prior.mean = prior.mean + i*prior[i]
     }
-    post.mean=(Nmin:Nmax)[which.min(abs(posterior-rep(mean(posterior[posterior>0]),Nmax)))][1]
+  
+    post.mean=sum((1:Nmax)*posterior)
     post.median=sum((cumsum(posterior)<0.5)==T)+1
     samp.ub=sum((cumsum(posterior)<1-input$alpha)==T)+1
 
